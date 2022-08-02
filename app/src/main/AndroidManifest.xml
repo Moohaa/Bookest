@@ -17,8 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Books"
         tools:targetApi="31">
+
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".presentation.getUserInfos.GetUserInfoActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Books">

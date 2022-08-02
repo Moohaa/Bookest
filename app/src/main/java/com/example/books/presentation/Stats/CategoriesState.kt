@@ -1,4 +1,4 @@
-package com.example.books.presentation.RegisterInfoScreen
+package com.example.books.presentation.Stats
 
 import com.example.books.domain.model.Category
 

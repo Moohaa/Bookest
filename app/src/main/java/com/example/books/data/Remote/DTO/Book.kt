@@ -1,7 +1,17 @@
 package com.example.books.data.Remote.DTO
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
+import com.example.books.data.Remote.DTO.Converters.BuyLinksConverter
 import com.google.gson.annotations.SerializedName
+
+@Entity(tableName = "Book")
 data class Book(
+    @PrimaryKey(autoGenerate = true)
+    val id:Int,
+
     @SerializedName("age_group")
     val ageGroup: String,
     @SerializedName("amazon_product_url")
@@ -20,8 +30,10 @@ data class Book(
     val bookReviewLink: String,
     @SerializedName("book_uri")
     val bookUri: String,
-    @SerializedName("buy_links")
-    val buyLinks: List<BuyLink>,
+
+    //@SerializedName("buy_links")
+    ///var buyLinks: List<BuyLink>,
+
     val contributor: String,
     @SerializedName("contributor_note")
     val contributorNote: String,
@@ -29,7 +41,6 @@ data class Book(
     val description: String,
     @SerializedName("first_chapter_link")
     val firstChapterLink: String,
-    val isbns: List<Isbn>,
     val price: String,
     @SerializedName("primary_isbn10")
     val primaryIsbn10: String,

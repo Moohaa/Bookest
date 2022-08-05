@@ -1,6 +1,7 @@
 package com.example.books.presentation.getUserInfos.screens
 
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,10 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Popup
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.books.domain.model.Category
 import com.example.books.presentation.getUserInfos.viewmodels.GetUserFavCategoriesViewModel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun GetUserFavoriteCategories(
@@ -43,26 +46,7 @@ fun GetUserFavoriteCategories(
             LazyColumn(modifier = Modifier.fillMaxHeight(0.9f)
             ) {
                 items(state.categories) { c ->
-                    var isselected by remember {
-                        mutableStateOf(false)
-                    }
-                    println(c.toString())
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                isselected = !isselected
-                            }
-                            .background(if (isselected) MaterialTheme.colors.secondary else Color.Transparent)
-
-                            .padding(0.dp, 10.dp)
-                    )
-                    {
-                        Text(
-                            text = c.displayName,
-                            modifier = Modifier.padding(10.dp,0.dp)
-                        )
-                    }
+                    categoryItem(category = c)
                     Divider()
                 }
             }
@@ -74,6 +58,8 @@ fun GetUserFavoriteCategories(
                 Button(
                     modifier=Modifier.width(150.dp),
                     onClick = {
+                        viewModel.saveCategories(state.categories)
+
                         navController.navigate("app"){
                             popUpTo(0)
                         }
@@ -99,3 +85,27 @@ fun GetUserFavoriteCategories(
     }
 }
 
+@Composable 
+fun categoryItem(
+    category :Category
+){
+    var isselected by remember {
+        mutableStateOf(category.isFav)
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                category.isFav=!category.isFav
+                isselected=!isselected
+            }
+            .background(if (isselected) MaterialTheme.colors.secondary else Color.Transparent)
+            .padding(0.dp, 10.dp)
+    )
+    {
+        Text(
+            text = category.displayName,
+            modifier = Modifier.padding(10.dp,0.dp)
+        )
+    }
+}

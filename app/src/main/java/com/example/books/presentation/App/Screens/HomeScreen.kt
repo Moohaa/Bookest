@@ -1,5 +1,6 @@
 package com.example.books.presentation.App.Screens
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
@@ -28,40 +29,46 @@ fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel = hiltViewModel()
 ){
-    val state = viewModel.state.value
+    var state =viewModel.state.value
 
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-
-            ) {
-            Text(text = "This week", style = MaterialTheme.typography.h5,
-                modifier= Modifier.padding(20.dp,10.dp)
-            )
-        }
-        Divider(modifier= Modifier
-            .padding(20.dp, 0.dp)
-            .fillMaxWidth()
-            .background(Color.Black) )
-
-        LazyVerticalGrid(
-            cells = GridCells.Fixed(2),
-            contentPadding = PaddingValues(0.dp,10.dp),
-            modifier = Modifier.fillMaxSize()
+    Box(modifier = Modifier
+        .fillMaxSize()) {
+        Column(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            state.categoryBooks?.data?.let {
-                items(it.books) { c ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+
+                ) {
+                Text(text = "This week", style = MaterialTheme.typography.h5,
+                    modifier= Modifier.padding(20.dp,10.dp)
+                )
+            }
+            Divider(modifier= Modifier
+                .padding(20.dp, 0.dp)
+                .fillMaxWidth()
+                .background(Color.Black) )
+
+            LazyVerticalGrid(
+                cells = GridCells.Fixed(2),
+                contentPadding = PaddingValues(0.dp,10.dp),
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Log.d("hhhj",state.categoryBooks.toString())
+                state.categoryBooks?.let {
+                    items(it) { c ->
                         Image(
                             painter = rememberAsyncImagePainter(c.bookImage),
                             contentDescription = null,
                             modifier = Modifier
                                 .size(270.dp)
                                 .padding(0.dp, 4.dp)
-                                .clickable { TODO() }
+                                .clickable {
+                                    navController.navigate("book/"+c.id)
+                                }
                         )
 
+                    }
                 }
             }
         }
@@ -79,8 +86,8 @@ fun HomeScreen(
             CircularProgressIndicator()
         }
 
-
-
     }
+
+
 
 }

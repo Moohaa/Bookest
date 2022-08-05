@@ -44,7 +44,6 @@ fun GetUserNameScreen(
                     nameState=it
                 } )
                 Row(
-
                     horizontalArrangement = Arrangement.End,
                     modifier=Modifier
                         .fillMaxWidth()

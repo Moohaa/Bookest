@@ -9,8 +9,8 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "Book")
 data class Book(
-    @PrimaryKey(autoGenerate = true)
-    val id:Int,
+    @PrimaryKey(autoGenerate = false)
+    val title: String,
 
     @SerializedName("age_group")
     val ageGroup: String,
@@ -52,7 +52,6 @@ data class Book(
     val rankLastWeek: Int,
     @SerializedName("sunday_review_link")
     val sundayReviewLink: String,
-    val title: String,
     @SerializedName("weeks_on_list")
     val weeksOnList: Int
 )

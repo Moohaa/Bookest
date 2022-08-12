@@ -54,9 +54,8 @@ fun HomeScreen(
                 contentPadding = PaddingValues(0.dp,10.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
-                Log.d("hhhj",state.categoryBooks.toString())
                 state.categoryBooks?.let {
-                    items(it) { c ->
+                    items(it.data.books) { c ->
                         Image(
                             painter = rememberAsyncImagePainter(c.bookImage),
                             contentDescription = null,
@@ -64,7 +63,7 @@ fun HomeScreen(
                                 .size(270.dp)
                                 .padding(0.dp, 4.dp)
                                 .clickable {
-                                    navController.navigate("book/"+c.id)
+                                    navController.navigate("book/"+c.title)
                                 }
                         )
 

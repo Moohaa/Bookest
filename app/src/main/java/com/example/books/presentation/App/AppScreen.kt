@@ -18,6 +18,7 @@ import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -29,9 +30,13 @@ import com.example.books.presentation.App.Screens.BookScreen
 import com.example.books.presentation.App.Screens.DiscoverScreen
 import com.example.books.presentation.App.Screens.FavouriteScreen
 import com.example.books.presentation.App.Screens.HomeScreen
+import com.example.books.presentation.App.ViewModels.BookViewModel
+import com.example.books.presentation.App.ViewModels.HomeViewModel
 
 @Composable
-fun AppScreen(){
+fun AppScreen(
+    viewModel: HomeViewModel = hiltViewModel()
+){
     val navController = rememberNavController()
     val items= listOf(
         BottomNavItem.Home,
@@ -79,8 +84,16 @@ fun AppScreen(){
             composable(BottomNavItem.Home.route) { HomeScreen(navController) }
             composable(BottomNavItem.Discover.route) { DiscoverScreen(navController) }
             composable(BottomNavItem.Favourite.route) { FavouriteScreen(navController)}
-            composable("book/{book_id}") {backStackEntry->
-                BookScreen(navController,backStackEntry.arguments?.getString("userId"))}
+            composable("book/{book_title}") {backStackEntry->
+
+                val book_id= backStackEntry.arguments?.getString("book_title")
+
+                viewModel.state.value.categoryBooks?.data?.books?.forEach{
+                    if(it.title == book_id){
+                        BookScreen(navController,it)
+                    }
+                }
+            }
         }
     }
 

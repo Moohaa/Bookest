@@ -4,9 +4,12 @@ import android.content.Context
 import androidx.room.Room
 import com.example.books.common.Constants
 import com.example.books.data.Remote.BookAPI
+import com.example.books.data.Repository.BookRepositoryImpl
 import com.example.books.data.Repository.CategoryRepositoryImpl
+import com.example.books.data.local.Dao.BookDao
 import com.example.books.data.local.Dao.CategoryDao
 import com.example.books.data.local.Db
+import com.example.books.domain.repository.BookRepository
 import com.example.books.domain.repository.CategoryRepository
 import dagger.Module
 import dagger.Provides
@@ -39,13 +42,19 @@ class AppModule {
         return CategoryRepositoryImpl(api,categoryDao)
     }
     @Provides
+    @Singleton
+    fun provideBookRepository(bookDao: BookDao): BookRepository {
+        return BookRepositoryImpl(bookDao)
+    }
+
+    @Provides
     fun provideBookDb(
         @ApplicationContext
         context : Context
     ) = Room.databaseBuilder(
         context,
         Db::class.java,
-        "Category"
+        "db",
     ).build()
 
     @Provides

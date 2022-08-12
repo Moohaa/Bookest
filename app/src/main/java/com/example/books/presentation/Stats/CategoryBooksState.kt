@@ -6,6 +6,6 @@ import com.example.books.domain.model.CategoryBooks
 
 data class CategoryBooksState(
     var isLoading: Boolean = false,
-    var categoryBooks: List<Book> = emptyList(),
+    var categoryBooks: CategoryBooks? =null,
     var error: String = ""
 )

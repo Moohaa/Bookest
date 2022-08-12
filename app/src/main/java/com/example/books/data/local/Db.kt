@@ -9,7 +9,7 @@ import com.example.books.data.local.Dao.BookDao
 import com.example.books.data.local.Dao.CategoryDao
 import com.example.books.domain.model.Category
 
-@Database(entities = [Category::class,Book::class], version = 1, exportSchema = false)
+@Database(entities = [Category::class,Book::class], version = 2, exportSchema = false)
 @TypeConverters(BuyLinksConverter::class)
 abstract class Db:RoomDatabase() {
     abstract fun bookDao(): BookDao

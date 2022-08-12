@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.books.common.Ressource
 import com.example.books.data.Remote.DTO.Book
+import com.example.books.data.Repository.BookRepositoryImpl
 import com.example.books.data.Repository.CategoryRepositoryImpl
 import com.example.books.domain.model.Category
 import com.example.books.domain.model.CategoryBooks
@@ -16,6 +17,7 @@ import com.example.books.domain.useCases.getCategories.GetCategoryBooksUseCase
 import com.example.books.presentation.Stats.CategoriesState
 import com.example.books.presentation.Stats.CategoryBooksState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -24,7 +26,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getCategoryBooksUseCase:  GetCategoryBooksUseCase,
-    private val categoryRepositoryImpl: CategoryRepositoryImpl
+    private val categoryRepositoryImpl: CategoryRepositoryImpl,
+    private val bookRepositoryImpl: BookRepositoryImpl
 ):ViewModel(){
     private val _state = mutableStateOf(CategoryBooksState())
     val state: State<CategoryBooksState> = _state
@@ -42,21 +45,22 @@ class HomeViewModel @Inject constructor(
             when (result) {
                 is Ressource.Success -> {
                     result.data?.let{
+                        /*
                         Log.d("j",result.data.toString()+"\n")
                         result.data.data.books.forEach{
                             l.add(it)
                         }
                         ll.categoryBooks=l
-                        _state.value = ll
+                        _state.value = */
+                        _state.value= CategoryBooksState(categoryBooks = result.data)
                     }
                 }
                 is Ressource.Error -> {
                     ll.error="hh"
-                    _state.value = ll
+                    _state.value = CategoryBooksState(error = "network not issues")
                 }
                 is Ressource.Loading -> {
-                    ll.isLoading=true
-                    _state.value = ll
+                    _state.value = CategoryBooksState(isLoading = true)
                 }
             }
         }.launchIn(viewModelScope)
@@ -65,13 +69,20 @@ class HomeViewModel @Inject constructor(
     fun getFavCategories() {
         viewModelScope.launch {
             categoryRepositoryImpl.getLocalCategories().collect { response ->
-                response.forEach{
+               /* response.forEach{
                     if(it.isFav){
                         getCategoryBooks(it.listNameEncoded)
                     }
-                }
+                }*/
+                getCategoryBooks(response[0].listNameEncoded)
 
             }
+        }
+    }
+
+    fun getBook(book_title:String){
+        viewModelScope.launch{
+            bookRepositoryImpl.getBook(book_title)
         }
     }
 

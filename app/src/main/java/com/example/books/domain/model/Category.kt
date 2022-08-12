@@ -8,7 +8,6 @@ import androidx.room.PrimaryKey
 data class Category(
     @PrimaryKey
     val displayName: String,
-
     val listName: String,
     val listNameEncoded: String,
     val newestPublishedDate: String,

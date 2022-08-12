@@ -1,5 +1,6 @@
 package com.example.books.presentation.App.Screens
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,65 +20,81 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.books.R
+import com.example.books.data.Remote.DTO.Book
+import com.example.books.presentation.App.Components.Topbar
+import com.example.books.presentation.App.ViewModels.BookViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.intellij.lang.annotations.JdkConstants
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BookScreen(
     navController: NavController,
-    book_id : String?
+    book :Book,
+    viewModel :BookViewModel= hiltViewModel(),
+
 ) {
+    val scope = rememberCoroutineScope()
+    val scaffoldState = rememberBottomSheetScaffoldState()
+
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = "") },
-                navigationIcon = if (navController.previousBackStackEntry != null) {
-                    {
-                        IconButton(onClick = { navController.navigateUp() }) {
-                            Icon(
-                                imageVector = Icons.Filled.ArrowBack,
-                                contentDescription = "Back"
+           Topbar(navController = navController,viewModel,book)
+        },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                text={
+                },
+                icon= {
+                    Icon(
+                        modifier = Modifier
+                            .size(
+                                if (scaffoldState.bottomSheetState.isCollapsed
+                                ) 40.dp else 0.dp
                             )
+                            .padding(2.dp)
+
+                            ,
+                        painter = painterResource(id = R.drawable.ic_baseline_shopping_cart_24),
+                        contentDescription = "ff"
+                    )
+                }
+                ,
+                onClick = {
+                    scope.launch {
+                        scaffoldState.bottomSheetState.apply {
+                            if (isCollapsed) expand() else collapse()
                         }
                     }
-                } else {
-                    null
-                }
 
+                }
             )
-        },
+        }
+
 
     )
     {
-        val scaffoldState = rememberBottomSheetScaffoldState()
-        val scope = rememberCoroutineScope()
         BottomSheetScaffold(
             // Defaults to BottomSheetScaffoldDefaults.SheetPeekHeight
-            sheetPeekHeight = 50.dp,
+            sheetPeekHeight = 0.dp,
 
             // Defaults to true
-            sheetGesturesEnabled = false,
+            sheetGesturesEnabled = true,
 
             scaffoldState = scaffoldState,
 
             sheetContent = {
                 // Sheet content
                 Column(
-                    modifier=Modifier.fillMaxWidth()
+                    modifier= Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp, 5.dp)
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .size(50.dp)
-                            .background(Color.LightGray),
 
-                    ) {
-
-                    }
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -90,7 +107,7 @@ fun BookScreen(
                                 painter = painterResource(id = R.drawable.ic_baseline_shopping_cart_24), contentDescription ="ff" )
                         }
                         Text(text = "find it online")
-                        
+
                     }
                     Row(
                         modifier = Modifier
@@ -122,29 +139,6 @@ fun BookScreen(
                     }
                 }
             },
-            floatingActionButton = {
-                ExtendedFloatingActionButton(
-                    text={
-                        Text("")
-                    },
-                    icon={
-                        Icon(
-                            modifier=Modifier.size(40.dp),
-                            painter = painterResource(id = R.drawable.ic_baseline_shopping_cart_24), contentDescription ="ff" )
-                    }
-                    ,
-                    onClick = {
-                        scope.launch {
-                            scaffoldState.bottomSheetState.apply {
-                                if (isCollapsed) expand() else collapse()
-                            }
-                        }
-                    }
-                )
-            }
-
-
-
         ) {
             // Screen content
             Box(
@@ -154,7 +148,7 @@ fun BookScreen(
                 Column(
                     modifier= Modifier
                         .fillMaxSize()
-                        .padding(10.dp, 0.dp, 0.dp, 60.dp)
+                        .padding(10.dp, 0.dp)
                         .verticalScroll(scrollState),
 
                 ) {
@@ -163,25 +157,22 @@ fun BookScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Image(
-                            painter = rememberAsyncImagePainter("https://storage.googleapis.com/du-prd/books/images/9780385549325.jpg"),
+                            painter = rememberAsyncImagePainter(book.bookImage),
                             contentDescription = null,
                             modifier = Modifier
-                                .size(200.dp)
+                                .size(300.dp)
                                 .padding(0.dp, 4.dp)
-                                .clickable {
-                                    navController.navigate("book/88")
-                                }
                         )
                         Text(
-                            style= MaterialTheme.typography.h5,
-                            text = "The man from the moon"
+                            style= MaterialTheme.typography.h6,
+                            text = book.title
                         )
                         Text(
                             textAlign = TextAlign.Center,
-                            text = "       the man from the moon took about the problems facing mans from other planite espicialy the moon wich make sense most of the time"
+                            text = "   " +book.description
                         )
-
                     }
+
                     Divider()
                     Text(
                         style=MaterialTheme.typography.h6,
@@ -189,7 +180,7 @@ fun BookScreen(
                         text = "Author :"
                     )
                     val padding=20
-                    chips(string = "Mohamed Boukedir" , padding = padding)
+                    chips(string = book.author , padding = padding)
 
                     Divider()
                     Text(
@@ -198,8 +189,7 @@ fun BookScreen(
                         text = "Contributors :"
                     )
 
-                    chips(string = "Mohamed" , padding = padding)
-                    chips(string = "Admine" , padding = padding)
+                    chips(string = book.contributor , padding = padding)
 
 
                     Divider()
@@ -208,21 +198,7 @@ fun BookScreen(
                         style=MaterialTheme.typography.h6,
                         text = "Publisher :"
                     )
-                    chips(string = "Siriai" , padding = padding)
-                    Divider()
-                    Text(
-                        modifier = Modifier.padding(5.dp,10.dp,0.dp,5.dp),
-                        style=MaterialTheme.typography.h6,
-                        text = "Publisher :"
-                    )
-                    chips(string = "Siriai" , padding = padding)
-                    Divider()
-                    Text(
-                        modifier = Modifier.padding(5.dp,10.dp,0.dp,5.dp),
-                        style=MaterialTheme.typography.h6,
-                        text = "Publisher :"
-                    )
-                    chips(string = "Siriai" , padding = padding)
+                    chips(string = book.publisher, padding = padding)
                 }
 
               }
@@ -239,6 +215,9 @@ fun chips(
         .padding(20.dp, 3.dp, 0.dp, 3.dp)
         .clip(RoundedCornerShape(10.dp))
         .background(MaterialTheme.colors.secondary)
+        .clickable {
+
+        }
     ){
         Text(
             modifier=Modifier.padding(5.dp),

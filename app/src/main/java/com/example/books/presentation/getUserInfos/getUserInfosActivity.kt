@@ -13,9 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.books.presentation.App.AppGraph
 import com.example.books.presentation.getUserInfos.screens.GetUserFavoriteCategories
-import com.example.books.presentation.getUserInfos.screens.GetUserNameScreen
 import com.example.books.presentation.ui.theme.BooksTheme
-import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,8 +25,7 @@ class GetUserInfoActivity :ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier=Modifier.fillMaxSize()){
                     val navController = rememberNavController()
-                    NavHost(navController, startDestination = "getUserInfos") {
-                        composable("getUserInfos") { GetUserNameScreen(navController) }
+                    NavHost(navController, startDestination = "getUserFavouritCategories") {
                         composable("getUserFavouritCategories"){ GetUserFavoriteCategories(navController) }
                         AppGraph()
                     }

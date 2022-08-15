@@ -22,6 +22,7 @@ fun FavouriteScreen(
     navController: NavController,
     viewModel :FavouriteViewModel = hiltViewModel()
 ){
+    viewModel.getFavBooks()
     val books=viewModel.books
 
     LazyVerticalGrid(

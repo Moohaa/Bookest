@@ -27,7 +27,6 @@ class GetUserFavCategoriesViewModel @Inject constructor(
 
     init {
         getCategories()
-
     }
 
     private fun getCategories() {

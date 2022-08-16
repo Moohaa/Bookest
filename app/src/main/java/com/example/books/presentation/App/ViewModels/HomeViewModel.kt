@@ -35,8 +35,6 @@ class HomeViewModel @Inject constructor(
     var l:MutableList<Book> = mutableListOf()
     var ll=CategoryBooksState()
 
-
-
     init {
         getFavCategories()
     }
@@ -80,10 +78,5 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getBook(book_title:String){
-        viewModelScope.launch{
-            bookRepositoryImpl.getBook(book_title)
-        }
-    }
 
 }

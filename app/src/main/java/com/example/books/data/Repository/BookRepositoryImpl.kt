@@ -15,12 +15,10 @@ class BookRepositoryImpl  @Inject constructor(
     override suspend fun getBook(book_id: String): Flow<Book> {
         return bookDao.getBook(book_id)
     }
-
     override suspend fun saveBook(book: Book) {
         bookDao.addBook(book)
     }
-
-    override suspend fun getFavBooks(): Flow<List<Book>> {
+    override suspend fun getBooks(): Flow<List<Book>> {
         return bookDao.getBooks()
     }
 }

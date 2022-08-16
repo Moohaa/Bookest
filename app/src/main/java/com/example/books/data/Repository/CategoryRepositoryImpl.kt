@@ -2,6 +2,7 @@ package com.example.books.data.Repository
 
 import android.util.Log
 import com.example.books.data.Remote.BookAPI
+import com.example.books.data.Remote.DTO.Book
 import com.example.books.data.Remote.DTO.CategoriesDTO
 import com.example.books.data.Remote.DTO.CategoryBooksDTO
 import com.example.books.data.Remote.DTO.toCategories

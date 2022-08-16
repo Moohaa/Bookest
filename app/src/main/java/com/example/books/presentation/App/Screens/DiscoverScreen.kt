@@ -34,7 +34,7 @@ fun DiscoverScreen(
     Column {
         LazyRow(){
             items(categories) { c ->
-                if(c.isFav) FavCategoryCard(category = c)
+                if(c.isFav) FavCategoryCard(navController,category = c)
                 Divider()
             }
         }
@@ -74,6 +74,7 @@ fun DiscoverScreen(
 }
 @Composable
 fun FavCategoryCard(
+    navController: NavController,
     category: Category
 ){
     Box(modifier = Modifier
@@ -82,6 +83,7 @@ fun FavCategoryCard(
         .clip(RoundedCornerShape(10.dp))
         .background(MaterialTheme.colors.secondary)
         .clickable {
+            navController.navigate("category/"+category.listNameEncoded)
 
         }
     ){
@@ -103,7 +105,7 @@ fun CategoryCard(
         .padding(2.dp, 0.dp)
         .background(MaterialTheme.colors.background)
         .clickable {
-            navController.navigate("book/55")
+            navController.navigate("category/"+category.listNameEncoded)
         }
     ){
         Row(

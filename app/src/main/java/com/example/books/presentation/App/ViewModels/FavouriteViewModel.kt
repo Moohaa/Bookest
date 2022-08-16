@@ -19,12 +19,10 @@ class FavouriteViewModel @Inject constructor(
 ) : ViewModel(){
 
     var books by mutableStateOf(emptyList<Book>())
-    init {
-        getFavBooks()
-    }
+
     fun  getFavBooks() {
         viewModelScope.launch {
-            bookRepositoryImpl.getFavBooks().collect { response ->
+            bookRepositoryImpl.getBooks().collect { response ->
                 books = response
             }
         }

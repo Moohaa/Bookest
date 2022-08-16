@@ -26,16 +26,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.books.presentation.App.Screens.BookScreen
-import com.example.books.presentation.App.Screens.DiscoverScreen
-import com.example.books.presentation.App.Screens.FavouriteScreen
-import com.example.books.presentation.App.Screens.HomeScreen
+import com.example.books.presentation.App.Screens.*
+import com.example.books.presentation.App.ViewModels.AppViewModel
 import com.example.books.presentation.App.ViewModels.BookViewModel
 import com.example.books.presentation.App.ViewModels.HomeViewModel
 
 @Composable
 fun AppScreen(
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: AppViewModel = hiltViewModel()
 ){
     val navController = rememberNavController()
     val items= listOf(
@@ -87,12 +85,18 @@ fun AppScreen(
             composable("book/{book_title}") {backStackEntry->
 
                 val book_id= backStackEntry.arguments?.getString("book_title")
-
-                viewModel.state.value.categoryBooks?.data?.books?.forEach{
+                viewModel.getBooks()
+                viewModel.books.forEach{
                     if(it.title == book_id){
                         BookScreen(navController,it)
                     }
                 }
+
+            }
+            composable("category/{category_name}"){ backStackEntry->
+                val category_name= backStackEntry.arguments?.getString("category_name")
+                CategoryBooksScreen(navController = navController, categoryName = category_name!!)
+
             }
         }
     }

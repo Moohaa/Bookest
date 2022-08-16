@@ -8,5 +8,5 @@ interface BookRepository {
     suspend fun getBook(book_id : String): Flow<Book>
     suspend fun saveBook(book :Book):Unit
 
-    suspend fun getFavBooks() : Flow<List<Book>>
+    suspend fun getBooks() : Flow<List<Book>>
 }

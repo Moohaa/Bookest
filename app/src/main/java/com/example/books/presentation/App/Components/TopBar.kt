@@ -44,6 +44,7 @@ fun Topbar(
                 mutableStateOf(false)
             }
             IconButton(onClick = {
+                book.isFav=true
                 viewModel.saveBook(book)
                 clicked=true
             }) {

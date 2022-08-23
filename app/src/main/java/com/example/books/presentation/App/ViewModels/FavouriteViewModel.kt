@@ -1,5 +1,6 @@
 package com.example.books.presentation.App.ViewModels
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,6 +11,7 @@ import com.example.books.data.Repository.BookRepositoryImpl
 import com.example.books.data.Repository.CategoryRepositoryImpl
 import com.example.books.domain.model.Category
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,13 +21,19 @@ class FavouriteViewModel @Inject constructor(
 ) : ViewModel(){
 
     var books by mutableStateOf(emptyList<Book>())
+    var call=false
 
     fun  getFavBooks() {
-        viewModelScope.launch {
-            bookRepositoryImpl.getBooks().collect { response ->
-                books = response
+        if(!call){
+            call=true
+            viewModelScope.launch {
+                bookRepositoryImpl.getBooks().collect { response ->
+                    books=response
+                    call=false
+                }
             }
         }
+
     }
 
 }

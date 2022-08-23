@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName
 data class Book(
     @PrimaryKey(autoGenerate = false)
     val title: String,
-
+    var isFav :Boolean =false,
     @SerializedName("age_group")
     val ageGroup: String,
     @SerializedName("amazon_product_url")

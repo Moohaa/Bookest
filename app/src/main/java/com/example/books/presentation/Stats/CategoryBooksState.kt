@@ -6,6 +6,6 @@ import com.example.books.domain.model.CategoryBooks
 
 data class CategoryBooksState(
     var isLoading: Boolean = false,
-    var categoryBooks: CategoryBooks? =null,
+    var categoryBooks: List<Book>? = mutableListOf(),
     var error: String = ""
 )

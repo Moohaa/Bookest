@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.books.common.Ressource
+import com.example.books.common.TempData
 import com.example.books.data.Remote.DTO.Book
 import com.example.books.data.Repository.BookRepositoryImpl
 import com.example.books.domain.model.CategoryBooks
@@ -31,13 +32,15 @@ class  CategoryBooksViewModel @Inject constructor(
     val state: State<CategoryBooksState> = _state
 
     fun getCategoryBooks(category_name: String) {
-        if (_state.value.categoryBooks==null) {
+        if (_state.value.categoryBooks?.isEmpty() == true) {
             getCategoryBooksUseCase(category_name).onEach { result ->
                 when (result) {
                     is Ressource.Success -> {
                         result.data?.let{
-                            _state.value= CategoryBooksState(categoryBooks = result.data)
-                            saveCategoryBooks(result.data)
+                            _state.value= CategoryBooksState(categoryBooks = result.data.data.books)
+                            result.data.data.books.forEach{
+                                TempData.data.add(it)
+                            }
                         }
                     }
                     is Ressource.Error -> {
@@ -51,11 +54,4 @@ class  CategoryBooksViewModel @Inject constructor(
         }
     }
 
-    fun saveCategoryBooks(categoryBooks: CategoryBooks){
-        viewModelScope.launch(Dispatchers.IO){
-            categoryBooks.data.books.forEach{
-                bookRepositoryImpl.saveBook(it)
-            }
-        }
-    }
 }

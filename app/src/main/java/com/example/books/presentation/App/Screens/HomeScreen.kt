@@ -32,7 +32,8 @@ fun HomeScreen(
     var state =viewModel.state.value
 
     Box(modifier = Modifier
-        .fillMaxSize()) {
+        .fillMaxSize())
+    {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -55,7 +56,7 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxSize()
             ) {
                 state.categoryBooks?.let {
-                    items(it.data.books) { c ->
+                    items(it) { c ->
                         Image(
                             painter = rememberAsyncImagePainter(c.bookImage),
                             contentDescription = null,
@@ -79,10 +80,11 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
+                    .align(Alignment.Center)
             )
         }
         if(state.isLoading) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
 
     }

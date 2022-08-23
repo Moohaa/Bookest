@@ -21,4 +21,8 @@ class BookRepositoryImpl  @Inject constructor(
     override suspend fun getBooks(): Flow<List<Book>> {
         return bookDao.getBooks()
     }
+
+    override suspend fun deleteBook(book :Book) {
+        return bookDao.deleteBook(book)
+    }
 }

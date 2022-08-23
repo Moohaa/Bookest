@@ -13,7 +13,7 @@ interface BookDao {
     @Query("SELECT * FROM Book WHERE title = :book_title")
     fun getBook(book_title: String): Flow<Book>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addBook(book: Book)
 
     @Delete

@@ -31,17 +31,16 @@ fun FavouriteScreen(
         modifier = Modifier.fillMaxSize()
     ) {
             items(books) { c ->
-                Image(
-                    painter = rememberAsyncImagePainter(c.bookImage),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(270.dp)
-                        .padding(0.dp, 4.dp)
-                        .clickable {
-                            navController.navigate("book/"+c.title)
-                        }
-                )
-
+                    Image(
+                        painter = rememberAsyncImagePainter(c.bookImage),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(270.dp)
+                            .padding(0.dp, 4.dp)
+                            .clickable {
+                                navController.navigate("book/"+c.title)
+                            }
+                    )
             }
 
     }

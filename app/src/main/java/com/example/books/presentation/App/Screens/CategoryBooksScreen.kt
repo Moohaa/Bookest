@@ -65,7 +65,7 @@ fun CategoryBooksScreen(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     state.categoryBooks?.let{
-                        items(it.data.books) { c ->
+                        items(it) { c ->
                             Image(
                                 painter = rememberAsyncImagePainter(c.bookImage),
                                 contentDescription = null,

@@ -31,7 +31,6 @@ fun SplashScreen(
         verticalArrangement = Arrangement.Center
     ) {
         viewModel.setup(navController)
-        Log.d("e","jjjjj")
         Icon(
             modifier=Modifier.size(100.dp),
             painter = painterResource(id= R.drawable.ic_baseline_menu_book_24),

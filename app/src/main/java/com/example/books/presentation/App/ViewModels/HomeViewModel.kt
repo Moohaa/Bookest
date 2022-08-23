@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.books.common.Ressource
+import com.example.books.common.TempData
 import com.example.books.data.Remote.DTO.Book
 import com.example.books.data.Repository.BookRepositoryImpl
 import com.example.books.data.Repository.CategoryRepositoryImpl
@@ -18,6 +19,7 @@ import com.example.books.presentation.Stats.CategoriesState
 import com.example.books.presentation.Stats.CategoryBooksState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -43,18 +45,18 @@ class HomeViewModel @Inject constructor(
             when (result) {
                 is Ressource.Success -> {
                     result.data?.let{
-                        /*
                         Log.d("j",result.data.toString()+"\n")
                         result.data.data.books.forEach{
                             l.add(it)
+                            TempData.data.add(it)
                         }
                         ll.categoryBooks=l
-                        _state.value = */
-                        _state.value= CategoryBooksState(categoryBooks = result.data)
+                        ll.isLoading=false
+                        _state.value = ll
+                        //_state.value= CategoryBooksState(categoryBooks = )
                     }
                 }
                 is Ressource.Error -> {
-                    ll.error="hh"
                     _state.value = CategoryBooksState(error = "network not issues")
                 }
                 is Ressource.Loading -> {
@@ -67,12 +69,12 @@ class HomeViewModel @Inject constructor(
     fun getFavCategories() {
         viewModelScope.launch {
             categoryRepositoryImpl.getLocalCategories().collect { response ->
-               /* response.forEach{
+                response.forEach{
                     if(it.isFav){
+                        delay(500L)
                         getCategoryBooks(it.listNameEncoded)
                     }
-                }*/
-                getCategoryBooks(response[0].listNameEncoded)
+                }
 
             }
         }

@@ -26,6 +26,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.books.common.TempData
 import com.example.books.presentation.App.Screens.*
 import com.example.books.presentation.App.ViewModels.AppViewModel
 import com.example.books.presentation.App.ViewModels.BookViewModel
@@ -33,7 +34,6 @@ import com.example.books.presentation.App.ViewModels.HomeViewModel
 
 @Composable
 fun AppScreen(
-    viewModel: AppViewModel = hiltViewModel()
 ){
     val navController = rememberNavController()
     val items= listOf(
@@ -85,8 +85,7 @@ fun AppScreen(
             composable("book/{book_title}") {backStackEntry->
 
                 val book_id= backStackEntry.arguments?.getString("book_title")
-                viewModel.getBooks()
-                viewModel.books.forEach{
+                TempData.data.forEach{
                     if(it.title == book_id){
                         BookScreen(navController,it)
                     }

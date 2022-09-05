@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.books.common.TempData
 import com.example.books.data.Remote.DTO.Book
 import com.example.books.data.Repository.BookRepositoryImpl
 import com.example.books.data.Repository.CategoryRepositoryImpl
@@ -23,6 +24,17 @@ class FavouriteViewModel @Inject constructor(
     var books by mutableStateOf(emptyList<Book>())
     var call=false
 
+    init{
+        viewModelScope.launch {
+            bookRepositoryImpl.getBooks().collect { response ->
+                response.forEach{
+                    TempData.data.add(it)
+                }
+
+            }
+        }
+    }
+
     fun  getFavBooks() {
         if(!call){
             call=true
@@ -33,7 +45,6 @@ class FavouriteViewModel @Inject constructor(
                 }
             }
         }
-
     }
 
 }

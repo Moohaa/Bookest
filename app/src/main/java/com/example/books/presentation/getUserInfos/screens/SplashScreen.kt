@@ -42,7 +42,9 @@ fun SplashScreen(
             text = "Bookest"
         )
         CircularProgressIndicator(modifier = Modifier.padding(0.dp,80.dp))
-
+        Text(
+            text = "Powered by New York times API"
+        )
     }
 
 

@@ -34,7 +34,6 @@ class GetUserInfoActivity :ComponentActivity() {
                         }
                         composable("splashScreen"){
                             SplashScreen(navController)
-
                         }
                         AppGraph()
                     }
